@@ -4,10 +4,11 @@ import { RssFetcher } from './fetcher';
 import { ArticleFilter } from './filter';
 import { MarkdownFormatter } from './formatter';
 import { FileWriter } from './writer';
+import cron from 'node-cron';
 import { AISummarizer } from './summarizer';
 import { RSS_SOURCES, CONFIG } from './config';
 
-async function main() {
+async function runDigest() {
   console.log('🚀 开始生成AI新闻日报...');
 
   try {
@@ -97,9 +98,22 @@ async function main() {
   }
 }
 
-// 如果是直接运行，则执行main函数
+function main() {
+  const isCronMode = process.argv.includes('--cron');
+
+  if (!isCronMode) {
+    runDigest();
+    return;
+  }
+
+  console.log('⏰ Cron模式已启动，将在每天早上8点自动生成AI新闻日报');
+  cron.schedule('0 8 * * *', () => {
+    runDigest();
+  });
+}
+
 if (require.main === module) {
   main();
 }
 
-export { main };
+export { main, runDigest };
