@@ -4,7 +4,8 @@ export interface Article {
   pubDate: Date;
   source: string;
   description?: string;
-  summary?: string;
+  summary?: string; // 原始摘要（从description截取）
+  aiSummary?: string; // AI生成的摘要
 }
 
 export interface RssSource {
@@ -18,4 +19,7 @@ export interface DigestConfig {
   dateFormat: string;
   fileNameTemplate: string;
   maxSummaryLength: number;
+  enableAISummary: boolean;
+  aiModel?: string;
+  maxConcurrentAIRequests?: number;
 }

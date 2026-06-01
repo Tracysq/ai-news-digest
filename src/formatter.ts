@@ -30,6 +30,24 @@ export class MarkdownFormatter {
   }
 
   /**
+   * 获取文章的最佳可用摘要
+   */
+  getArticleSummary(article: Article): string | undefined {
+    // 优先使用AI生成的摘要
+    if (article.aiSummary) {
+      return article.aiSummary;
+    }
+
+    // 其次使用原始摘要
+    if (article.summary) {
+      return article.summary;
+    }
+
+    // 最后从description生成摘要
+    return this.generateSummary(article.description);
+  }
+
+  /**
    * 格式化单篇文章为Markdown
    */
   formatArticle(article: Article): string {
@@ -38,7 +56,7 @@ export class MarkdownFormatter {
     lines.push(`### [${article.title}](${article.link})`);
     lines.push(`发布时间: ${format(article.pubDate, 'yyyy-MM-dd HH:mm:ss')}`);
 
-    const summary = this.generateSummary(article.description);
+    const summary = this.getArticleSummary(article);
     if (summary) {
       lines.push(`摘要: ${summary}`);
     }

@@ -21,4 +21,7 @@ export const CONFIG: DigestConfig = {
   dateFormat: 'yyyy-MM-dd',
   fileNameTemplate: 'ai-news-{date}.md',
   maxSummaryLength: 100,
+  enableAISummary: true,
+  aiModel: 'claude-opus-4-7',
+  maxConcurrentAIRequests: 3,
 };
