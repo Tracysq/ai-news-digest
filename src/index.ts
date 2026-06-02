@@ -30,7 +30,12 @@ async function runDigest() {
     // 3. 过滤和排序
     console.log('🔍 过滤最近24小时的文章...');
     const recentArticles = filter.filterRecentArticles(allArticles, CONFIG.hoursAgo);
-    const sortedArticles = filter.sortByDate(recentArticles);
+
+    console.log('🔗 基于URL去重...');
+    const dedupedArticles = filter.deduplicateByUrl(recentArticles);
+    console.log(`   去重前: ${recentArticles.length}篇, 去重后: ${dedupedArticles.length}篇`);
+
+    const sortedArticles = filter.sortByDate(dedupedArticles);
 
     if (sortedArticles.length === 0) {
       console.log(`⚠️  最近${CONFIG.hoursAgo}小时内没有新文章`);

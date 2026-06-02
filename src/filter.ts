@@ -23,6 +23,20 @@ export class ArticleFilter {
   }
 
   /**
+   * 基于URL去重，保留发布时间最新的一篇
+   */
+  deduplicateByUrl(articles: Article[]): Article[] {
+    const map = new Map<string, Article>();
+    for (const article of articles) {
+      const existing = map.get(article.link);
+      if (!existing || article.pubDate > existing.pubDate) {
+        map.set(article.link, article);
+      }
+    }
+    return Array.from(map.values());
+  }
+
+  /**
    * 按来源分组
    */
   groupBySource(articles: Article[]): Record<string, Article[]> {
